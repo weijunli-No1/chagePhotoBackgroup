@@ -1,0 +1,24 @@
+<view class="page-wrap">
+  <navigation-bar title="证件照制作" />
+  <view class="main-canvas">
+    <view class="hero-block">
+      <view class="hero-title">证件照制作</view>
+      <view class="hero-subtitle">智能抠图，一键换底色</view>
+    </view>
+
+    <view class="upload-island hover-scale" bindtap="chooseImage">
+      <view class="upload-icon-wrap">
+        <view class="upload-icon">
+          <t-icon name="camera" size="80rpx" />
+        </view>
+      </view>
+      <view class="u-text">拍照或上传照片</view>
+      <view class="u-tip">请确保正面光线充足、面部清晰</view>
+    </view>
+
+    <view class="privacy-tag">
+      <t-icon name="cloud" size="30rpx" class="privacy-icon"/>
+      <text>云端 AI 智能处理，极速生成不留痕</text>
+    </view>
+  </view>
+</view>

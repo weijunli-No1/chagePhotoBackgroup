@@ -1,0 +1,46 @@
+<view class="page-wrap">
+  <navigation-bar title="历史作品" />
+  <scroll-view class="container list-scroll" scroll-y>
+    <block wx:if="{{!hasLogin}}">
+      <view class="modern-empty-wrap">
+        <view class="icon-circle">
+          <t-icon name="user" size="96rpx" class="icon-inner" />
+        </view>
+        <view class="empty-title">未登录访问限制</view>
+        <view class="empty-desc">登录后即可云端同步与管理历史证件照</view>
+        <t-button theme="primary" shape="round" size="large" bind:tap="goToProfile" class="modern-btn hover-scale">立即登录</t-button>
+      </view>
+    </block>
+    <block wx:elif="{{isLoading && historyList.length === 0}}">
+      <view class="center-wrap"><t-loading theme="circular" size="60rpx" text="加载中..." /></view>
+    </block>
+    <block wx:elif="{{historyList.length === 0}}">
+      <view class="modern-empty-wrap">
+        <view class="icon-circle">
+          <t-icon name="image" size="96rpx" class="icon-inner" />
+        </view>
+        <view class="empty-title">暂无创作记录</view>
+        <view class="empty-desc">您制作的证件照将会保存在这里</view>
+        <t-button theme="primary" shape="round" size="large" bind:tap="goToIndex" class="modern-btn hover-scale">去制作第一张</t-button>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="notice-wrap">
+        <t-notice-bar visible="true" marquee="{{marquee}}" content="云端历史记录最多保留7天，请及时保存" theme="info" prefixIcon="error-circle" />
+      </view>
+      <view class="history-grid">
+        <view class="history-card hover-scale" wx:for="{{historyList}}" wx:key="id">
+          <view class="img-wrap" bindtap="previewImage" data-url="{{item.photoUrl}}">
+            <image class="thumb" src="{{item.photoUrl}}" mode="aspectFill" lazy-load></image>
+          </view>
+          <view class="info-action">
+            <view class="time">{{item.timeStr}}</view>
+            <view class="delete-btn" data-id="{{item.id}}" bindtap="onDelete">
+              <t-icon name="delete" size="36rpx" color="#d52828" />
+            </view>
+          </view>
+        </view>
+      </view>
+    </block>
+  </scroll-view>
+</view>

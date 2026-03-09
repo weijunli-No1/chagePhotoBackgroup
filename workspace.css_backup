@@ -1,0 +1,366 @@
+.main-canvas {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  height: 100%;
+  padding: 20rpx 40rpx;
+  padding-bottom: calc(520rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  position: relative;
+  z-index: 10;
+}
+
+.hero-block {
+  width: 100%;
+  margin-top: 40rpx;
+  margin-bottom: 60rpx;
+}
+.hero-title {
+  font-size: 68rpx;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -2rpx;
+  margin-bottom: 24rpx;
+}
+.hero-subtitle {
+  font-size: 32rpx;
+  color: var(--spatial-text-sub);
+}
+
+.upload-island {
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--spatial-card);
+  backdrop-filter: blur(40rpx);
+  -webkit-backdrop-filter: blur(40rpx);
+  border-radius: 48rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 40rpx 80rpx -20rpx rgba(0,0,0,0.12);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* 使用伪元素解决 Skyline 下 dashed 边框丢失圆角的问题 */
+.upload-island::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: inherit;
+  border: 4rpx dashed rgba(0, 82, 217, 0.2);
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+.upload-island:active {
+  transform: scale(0.98);
+}
+.upload-island:active::after {
+  border-color: rgba(0, 82, 217, 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  .upload-island {
+    border-color: rgba(255,255,255,0.1);
+    box-shadow: 0 40rpx 80rpx -20rpx rgba(0,0,0,0.3), inset 0 0 0 2rpx rgba(255,255,255,0.05);
+  }
+}
+
+.upload-icon {
+  width: 172rpx;
+  height: 172rpx;
+  background: linear-gradient(135deg, rgba(0,82,217,0.15) 0%, rgba(0,82,217,0.02) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40rpx;
+  color: var(--spatial-brand);
+  box-shadow: 0 16rpx 40rpx -12rpx rgba(0, 82, 217, 0.2);
+}
+
+.u-text {
+  font-size: 44rpx;
+  font-weight: 700;
+  margin-bottom: 16rpx;
+  color: var(--spatial-text-main);
+}
+
+.u-tip {
+  font-size: 28rpx;
+  color: var(--spatial-text-sub);
+}
+
+.privacy-tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  margin-top: 48rpx;
+  font-size: 24rpx;
+  color: #52c41a;
+  background: rgba(82, 196, 26, 0.08);
+  padding: 16rpx 32rpx;
+  border-radius: 100rpx;
+  font-weight: 500;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.image-stage {
+  flex: 1;
+  width: 100%;
+  border-radius: 48rpx;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 20rpx 60rpx -10rpx rgba(0,0,0,0.15);
+}
+.preview-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background-color: var(--spatial-card);
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  background: rgba(0,0,0,0.15); /* 更轻透的遮罩底色 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.loading-glass-box {
+  width: 280rpx;
+  height: 280rpx;
+  background: rgba(255, 255, 255, 0.85); /* 毛玻璃白色质感卡片 */
+  backdrop-filter: blur(40rpx);
+  -webkit-backdrop-filter: blur(40rpx);
+  border-radius: 40rpx;
+  box-shadow: 0 20rpx 60rpx rgba(0,0,0,0.08), inset 0 2rpx 0 rgba(255,255,255,0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (prefers-color-scheme: dark) {
+  .loading-glass-box {
+    background: rgba(30, 30, 30, 0.85);
+    box-shadow: 0 20rpx 60rpx rgba(0,0,0,0.3), inset 0 2rpx 0 rgba(255,255,255,0.05);
+  }
+}
+
+.spinner {
+  width: 72rpx;
+  height: 72rpx;
+  border: 6rpx solid rgba(0, 82, 217, 0.1);
+  border-top-color: var(--spatial-brand, #0052d9); /* 替换为品牌主题色动效 */
+  border-radius: 50%;
+  animation: spin 0.8s cubic-bezier(0.6, 0.2, 0.4, 0.8) infinite;
+}
+
+@media (prefers-color-scheme: dark) {
+  .spinner {
+    border: 6rpx solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--spatial-brand, #0052d9);
+  }
+}
+
+.loading-text {
+  color: var(--spatial-text-main, #333);
+  font-weight: 600;
+  font-size: 28rpx;
+  letter-spacing: 2rpx;
+  margin-top: 32rpx;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.control-panel {
+  position: absolute;
+  bottom: calc(40rpx + env(safe-area-inset-bottom));
+  left: 40rpx;
+  right: 40rpx;
+  background: var(--spatial-card);
+  backdrop-filter: blur(80rpx) saturate(150%);
+  -webkit-backdrop-filter: blur(80rpx) saturate(150%);
+  border-radius: 56rpx;
+  padding: 32rpx 40rpx 40rpx;
+  box-shadow: 0 40rpx 80rpx -15rpx rgba(0,0,0,0.12);
+  border: 2rpx solid rgba(255,255,255,0.4);
+  animation: slideUp 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  box-sizing: border-box;
+}
+
+.panel-scroll {
+  height: 650rpx;
+  width: 100%;
+}
+@media (prefers-color-scheme: dark) {
+  .control-panel {
+    border-color: rgba(255,255,255,0.1);
+    box-shadow: 0 40rpx 80rpx -15rpx rgba(0,0,0,0.5);
+  }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(120rpx); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.panel-handle {
+  width: 72rpx;
+  height: 10rpx;
+  background: var(--spatial-text-sub);
+  opacity: 0.3;
+  border-radius: 10rpx;
+  margin: 0 auto 32rpx;
+}
+
+.panel-title {
+  font-size: 34rpx;
+  font-weight: 800;
+  margin-bottom: 32rpx;
+}
+
+.size-track {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20rpx;
+  margin-bottom: 40rpx;
+}
+
+.size-node-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.size-node {
+  padding: 12rpx 32rpx;
+  border-radius: 100rpx;
+  font-size: 26rpx;
+  font-weight: 500;
+  color: var(--spatial-text-main);
+  background: rgba(120, 120, 128, 0.08);
+  border: 2rpx solid transparent;
+  transition: all 0.3s ease;
+}
+
+.size-active {
+  background: var(--spatial-brand);
+  color: #FFFFFF;
+  border-color: rgba(0, 82, 217, 0.3);
+  box-shadow: 0 8rpx 16rpx rgba(0, 82, 217, 0.2);
+}
+
+.color-track {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24rpx;
+  padding-bottom: 40rpx;
+}
+
+.color-node-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+  flex-shrink: 0;
+}
+
+.custom-color-node {
+  background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);
+}
+
+.color-node {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 4rpx 8rpx rgba(255,255,255,0.5), 0 8rpx 16rpx rgba(0,0,0,0.06);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 6rpx solid transparent;
+}
+.color-node:active { transform: scale(0.9); }
+
+.node-active {
+  transform: scale(1.15) !important;
+  border-color: rgba(255,255,255,0.9);
+  box-shadow: 0 16rpx 32rpx rgba(0,0,0,0.15);
+}
+.color-node[data-color="#FFFFFF"] {
+  border: 2rpx solid rgba(0,0,0,0.1);
+}
+
+.color-name {
+  font-size: 24rpx;
+  color: var(--spatial-text-sub);
+  transition: all 0.3s;
+}
+.name-active {
+  color: var(--spatial-text-main);
+  font-weight: 700;
+}
+
+.action-dock {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  gap: 24rpx;
+}
+
+.btn-ghost, .btn-prime {
+  height: 104rpx;
+  border-radius: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 32rpx;
+}
+.btn-ghost {
+  flex: 1;
+  background: rgba(120,120,128,0.12);
+  color: var(--spatial-text-main);
+}
+.btn-prime {
+  flex: 2;
+  background: var(--spatial-text-main); /* 纯粹极简，极客感黑/白色按钮 */
+  color: var(--spatial-bg);
+  box-shadow: 0 12rpx 24rpx rgba(0,0,0,0.1);
+}
+@media (prefers-color-scheme: dark) {
+  .btn-prime {
+     background: var(--spatial-text-main);
+     color: var(--spatial-bg);
+  }
+}

@@ -1,0 +1,87 @@
+.profile-header {
+  display: flex;
+  align-items: center;
+  padding: 60rpx 40rpx;
+  margin-bottom: 40rpx;
+  background: linear-gradient(135deg, rgba(0, 82, 217, 0.12) 0%, rgba(0, 82, 217, 0.02) 100%);
+  background-color: var(--td-bg-color-container, #ffffff);
+  border-radius: 32rpx;
+  box-shadow: 0 16rpx 48rpx -12rpx rgba(0, 82, 217, 0.08);
+}
+@media (prefers-color-scheme: dark) {
+  .profile-header {
+    background: linear-gradient(135deg, rgba(0, 82, 217, 0.2) 0%, rgba(30, 30, 30, 0.8) 100%);
+    background-color: var(--td-bg-color-container, #1e1e1e);
+    box-shadow: 0 16rpx 48rpx -12rpx rgba(0, 0, 0, 0.4);
+  }
+}
+.avatar-wrap {
+  width: 148rpx;
+  height: 148rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 6rpx solid var(--td-bg-color-container, #ffffff);
+  box-shadow: 0 8rpx 24rpx rgba(0, 82, 217, 0.2);
+  margin-right: 36rpx;
+  flex-shrink: 0;
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.avatar-wrap:active {
+  transform: scale(0.9);
+}
+@media (prefers-color-scheme: dark) {
+  .avatar-wrap { border-color: #333; }
+}
+.empty-avatar {
+  background-color: var(--td-bg-color-component, #ccd5e0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  box-shadow: none;
+}
+.default-avatar {
+  background: linear-gradient(135deg, var(--td-brand-color, #0052D9) 0%, #366ef4 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.user-desc {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+.nickname {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: var(--td-text-color-primary, #333);
+  margin-bottom: 8rpx;
+}
+.welcome {
+  font-size: 26rpx;
+  color: var(--td-text-color-secondary, #999);
+}
+.menu-section {
+  padding: 16rpx 0;
+}
+.t-cell-group--card {
+  margin: 0 !important;
+}
+.contact-btn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 10;
+}
+
+
+@media (prefers-color-scheme: dark) {
+  .avatar-wrap {
+    --profile-icon-color: #E0E0E0;
+  }
+}

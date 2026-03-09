@@ -1,0 +1,149 @@
+.main-canvas {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  height: 100%;
+  padding: 20rpx 40rpx;
+  padding-bottom: calc(160rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  position: relative;
+  z-index: 10;
+}
+
+.hero-block {
+  width: 100%;
+  margin-top: 40rpx;
+  margin-bottom: 60rpx;
+}
+.hero-title {
+  font-size: 68rpx;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -2rpx;
+  margin-bottom: 24rpx;
+}
+.hero-subtitle {
+  font-size: 32rpx;
+  color: var(--spatial-text-sub);
+}
+
+.upload-island {
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--spatial-card);
+  backdrop-filter: blur(40rpx);
+  -webkit-backdrop-filter: blur(40rpx);
+  border-radius: 48rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 40rpx 80rpx -20rpx rgba(0,0,0,0.12);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* 使用伪元素解决 Skyline 下 dashed 边框丢失圆角的问题 */
+.upload-island::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: inherit;
+  border: 4rpx dashed var(--spatial-brand-shadow);
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+.upload-island:active {
+  transform: scale(0.98);
+}
+.upload-island:active::after {
+  border-color: rgba(0, 82, 217, 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  .upload-island {
+    border-color: rgba(255,255,255,0.1);
+    box-shadow: 0 40rpx 80rpx -20rpx rgba(0,0,0,0.3), inset 0 0 0 2rpx rgba(255,255,255,0.05);
+  }
+}
+
+.upload-icon-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40rpx;
+}
+
+.upload-icon-wrap::before {
+  content: "";
+  position: absolute;
+  width: 200rpx;
+  height: 200rpx;
+  background: var(--spatial-brand-shadow);
+  border-radius: 50%;
+  animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.15); opacity: 0.2; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+
+.upload-icon {
+  width: 172rpx;
+  height: 172rpx;
+  background: linear-gradient(135deg, rgba(0,82,217,0.15) 0%, rgba(0,82,217,0.02) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--spatial-brand);
+  box-shadow: 0 16rpx 40rpx -12rpx rgba(0, 82, 217, 0.2);
+  position: relative;
+  z-index: 1;
+}
+
+.u-text {
+  font-size: 44rpx;
+  font-weight: 700;
+  margin-bottom: 16rpx;
+  color: var(--spatial-text-main);
+}
+
+.u-tip {
+  font-size: 28rpx;
+  color: var(--spatial-text-sub);
+}
+
+.privacy-tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  margin-top: 48rpx;
+  font-size: 24rpx;
+  color: var(--spatial-brand);
+  background: rgba(0, 82, 217, 0.08);
+  padding: 16rpx 32rpx;
+  border-radius: 100rpx;
+  font-weight: 500;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+@media (prefers-color-scheme: dark) {
+  .upload-icon {
+    background: linear-gradient(135deg, rgba(59,130,246,0.15) 0%, rgba(59,130,246,0.02) 100%);
+    box-shadow: 0 16rpx 40rpx -12rpx rgba(59, 130, 246, 0.3);
+  }
+  .privacy-tag {
+    background: rgba(59, 130, 246, 0.12);
+  }
+}

@@ -1,0 +1,105 @@
+package com.photo.bg.controller;
+
+import cn.binarywang.wx.miniapp.api.WxMaService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.photo.bg.common.Result;
+import com.photo.bg.entity.User;
+import com.photo.bg.service.PythonApiService;
+import com.photo.bg.service.UserDailyUsageService;
+import com.photo.bg.service.UserService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDate;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api/photo")
+@RequiredArgsConstructor
+@Slf4j
+public class PhotoController {
+
+    private final PythonApiService pythonApiService;
+    private final UserService userService;
+    private final UserDailyUsageService userDailyUsageService;
+    private final WxMaService wxMaService;
+
+    @PostMapping("/generate-idphoto")
+    public Result<Map<String, Object>> generateIdPhoto(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam(value = "height", required = false) Integer height,
+            @RequestParam(value = "width", required = false) Integer width) {
+        
+        // 敏感性校验（微信API）
+        java.io.File tempFile = null;
+        try {
+            tempFile = java.io.File.createTempFile("check_", ".jpg");
+            java.awt.image.BufferedImage img = cn.hutool.core.img.ImgUtil.read(file.getInputStream());
+            if (img != null) {
+                int w = img.getWidth();
+                int h = img.getHeight();
+                float maxLen = 800f;
+                // 压缩图片以满足微信检测大小限制（1MB内）
+                if (w > maxLen || h > maxLen) {
+                    float ratio = maxLen / Math.max(w, h);
+                    cn.hutool.core.img.ImgUtil.scale(img, tempFile, ratio);
+                } else {
+                    cn.hutool.core.img.ImgUtil.write(img, tempFile);
+                }
+
+                boolean isSafe = wxMaService.getSecCheckService().checkImage(tempFile);
+                if (!isSafe) {
+                    return Result.error(400, "图片包含敏感内容，请更换后重试");
+                }
+            }
+        } catch (me.chanjar.weixin.common.error.WxErrorException e) {
+            log.error("微信敏感检查异常: {}", e.getMessage());
+            // 87014 是微信定义的风险内容错误码
+            if (e.getError().getErrorCode() == 87014) {
+                return Result.error(400, "图片包含违规内容(涉黄/涉暴/涉政)，请更换后重试");
+            }
+        } catch (Exception e) {
+            log.error("图片敏感度校验过程发生异常: {}", e.getMessage());
+        } finally {
+            if (tempFile != null && tempFile.exists()) {
+                tempFile.delete();
+            }
+        }
+
+        Map<String, Object> result = pythonApiService.generateIdPhoto(file, height, width);
+        return Result.success(result);
+    }
+
+    @PostMapping("/add-background")
+    public Result<Map<String, Object>> addBackground(
+            @RequestParam("base64Image") String base64Image,
+            @RequestParam("color") String color) {
+        Map<String, Object> result = pythonApiService.addBackground(base64Image, color);
+        return Result.success(result);
+    }
+
+    @PostMapping("/generate-layout")
+    public Result<Map<String, Object>> generateLayoutPhotos(
+            @RequestParam(value = "openid", required = false) String openid,
+            @RequestParam("base64Image") String base64Image,
+            @RequestParam(value = "height", required = false) Integer height,
+            @RequestParam(value = "width", required = false) Integer width) {
+        
+        if (openid != null && !openid.isEmpty()) {
+            User user = userService.getOne(new LambdaQueryWrapper<User>().eq(User::getOpenid, openid));
+            if (user != null) {
+                LocalDate today = LocalDate.now();
+                boolean canSave = userDailyUsageService.checkSaveConstraint(user.getId(), today);
+                if (!canSave) {
+                    return Result.error(4031, "今日免费保存次数已达上限");
+                }
+                userDailyUsageService.recordSave(user.getId(), today);
+            }
+        }
+
+        Map<String, Object> result = pythonApiService.generateLayoutPhotos(base64Image, height, width);
+        return Result.success(result);
+    }
+}

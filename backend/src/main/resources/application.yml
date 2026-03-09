@@ -1,0 +1,43 @@
+server:
+  port: 8080
+  tomcat:
+    max-http-form-post-size: 50MB
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+  application:
+    name: photo-bg-backend
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/photo_bg?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: QazXswEdc!123 # 根据实际情况修改
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      initialization-fail-timeout: -1
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  global-config:
+    db-config:
+      id-type: auto
+
+# 微信小程序配置
+wx:
+  miniapp:
+    appid: wx27e6572c41ae9ac8
+    secret: a19e49a8b7c64884cdb1599c65c89527
+
+# Python 图像处理接口配置
+python-api:
+  base-url: http://127.0.0.1:7860
+
+# MinIO 配置
+minio:
+  endpoint: https://www.myhaibin.top:9000
+  access-key: minioadmin
+  secret-key: minioadmin
+  bucket-name: haibin
+

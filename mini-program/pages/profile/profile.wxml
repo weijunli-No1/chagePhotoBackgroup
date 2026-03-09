@@ -1,0 +1,39 @@
+<view class="page-wrap">
+  <navigation-bar title="我的主页" />
+  <scroll-view class="container" scroll-y>
+    <view class="profile-header card">
+      <block wx:if="{{hasLogin}}">
+        <view class="avatar-wrap default-avatar">
+          <t-icon name="user" size="80rpx" color="var(--profile-icon-color, #fff)" />
+        </view>
+        <view class="user-desc">
+          <view class="nickname">微信用户</view>
+          <view class="welcome">欢迎回来，即刻开启照片处理！</view>
+        </view>
+      </block>
+      <block wx:else>
+        <view class="avatar-wrap empty-avatar">
+          <t-icon name="user" size="80rpx" color="var(--profile-icon-color, #fff)" />
+        </view>
+        <view class="user-desc">
+          <view class="nickname">未登录</view>
+          <view class="welcome" style="margin-bottom: 24rpx;">登录后可保存和管理历史作品</view>
+          <t-button theme="primary" shape="round" size="small" bindtap="onLogin">微信一键登录</t-button>
+        </view>
+      </block>
+    </view>
+
+    <view class="menu-section card hover-scale">
+      <t-cell-group theme="card" style="margin:0;">
+        <view style="position: relative;">
+          <t-cell title="联系客服" hover leftIcon="service" arrow />
+          <button open-type="contact" class="contact-btn"></button>
+        </view>
+        <t-cell title="清空历史缓存" hover bindtap="clearHistory" leftIcon="delete" />
+        <t-cell title="隐私安全政策" hover bindtap="navToPrivacy" leftIcon="lock-on" />
+        <t-cell title="免责声明与须知" hover bindtap="navToAgreement" leftIcon="info-circle" />
+        <t-cell wx:if="{{hasLogin}}" title="退出登录" hover bindtap="onLogout" leftIcon="poweroff" />
+      </t-cell-group>
+    </view>
+  </scroll-view>
+</view>
