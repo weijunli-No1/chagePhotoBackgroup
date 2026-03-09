@@ -64,14 +64,48 @@
 .menu-section {
   padding: 16rpx 0;
 }
-.contact-btn {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  z-index: 10;
+
+/* 联系客服悬浮按钮 */
+.contact-fab {
+  position: fixed;
+  right: 48rpx;
+  bottom: calc(160rpx + env(safe-area-inset-bottom));
+  width: 104rpx;
+  height: 104rpx;
+  min-width: 104rpx;
+  min-height: 104rpx;
+  max-width: 104rpx;
+  max-height: 104rpx;
+  border-radius: 52rpx;
+  background: var(--spatial-brand, #0052D9);
+  box-shadow: 0 8rpx 24rpx -4rpx rgba(0, 82, 217, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  padding: 0;
+  z-index: 100;
+  line-height: 1;
+}
+.contact-fab::after { display: none; }
+
+.contact-fab-text {
+  font-size: 18rpx;
+  color: #fff;
+  font-weight: 500;
+  margin-top: 6rpx;
+}
+
+.contact-fab-hover {
+  opacity: 0.75;
+}
+
+@media (prefers-color-scheme: dark) {
+  .contact-fab {
+    background: #3b82f6;
+    box-shadow: 0 8rpx 24rpx -4rpx rgba(59, 130, 246, 0.55);
+  }
 }
 
 
