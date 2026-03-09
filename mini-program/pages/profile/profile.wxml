@@ -26,7 +26,7 @@
     <view class="menu-section card">
       <t-cell-group theme="card" style="margin:0;">
         <t-cell title="清空历史缓存" hover bindtap="clearHistory" leftIcon="delete" />
-        <t-cell title="隔私安全政策" hover bindtap="navToPrivacy" leftIcon="lock-on" />
+        <t-cell title="隐私安全政策" hover bindtap="navToPrivacy" leftIcon="lock-on" />
         <t-cell title="免责声明与须知" hover bindtap="navToAgreement" leftIcon="info-circle" />
         <t-cell wx:if="{{hasLogin}}" title="退出登录" hover bindtap="onLogout" leftIcon="poweroff" />
       </t-cell-group>
