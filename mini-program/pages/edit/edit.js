@@ -44,6 +44,10 @@ Page({
     }
   },
 
+  // 阻止滑动穿透
+  preventTouchMove() {
+  },
+
   // 选择尺寸
   onSizeSelect(e) {
     const newIndex = e.currentTarget.dataset.index;
