@@ -41,3 +41,8 @@ minio:
   secret-key: minioadmin
   bucket-name: haibin
 
+
+# 自定义 NSFW 图片鉴黄校验服务
+nsfw:
+  enabled: true
+  api-url: http://127.0.0.1:3006/checkImg

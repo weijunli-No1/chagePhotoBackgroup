@@ -9,6 +9,7 @@ import com.photo.bg.service.UserDailyUsageService;
 import com.photo.bg.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +26,12 @@ public class PhotoController {
     private final UserService userService;
     private final UserDailyUsageService userDailyUsageService;
     private final WxMaService wxMaService;
+
+    @Value("${nsfw.enabled:false}")
+    private boolean nsfwEnabled;
+
+    @Value("${nsfw.api-url:http://127.0.0.1:3006/checkImg}")
+    private String nsfwApiUrl;
 
     @PostMapping("/generate-idphoto")
     public Result<Map<String, Object>> generateIdPhoto(
@@ -47,6 +54,24 @@ public class PhotoController {
                     cn.hutool.core.img.ImgUtil.scale(img, tempFile, ratio);
                 } else {
                     cn.hutool.core.img.ImgUtil.write(img, tempFile);
+                }
+
+                // ------ 自定义鉴黄服务双重校验 ------
+                if (nsfwEnabled) {
+                    try {
+                        java.util.Map<String, Object> paramMap = new java.util.HashMap<>();
+                        paramMap.put("file", tempFile);
+                        String responseStr = cn.hutool.http.HttpUtil.post(nsfwApiUrl, paramMap);
+                        cn.hutool.json.JSONObject resObj = cn.hutool.json.JSONUtil.parseObj(responseStr);
+                        if (resObj.getInt("code") == 0) {
+                            cn.hutool.json.JSONObject dataObj = resObj.getJSONObject("data");
+                            if (dataObj != null && !dataObj.getBool("isSafe", true)) {
+                                return Result.error(400, "图片存在不合规风险，请更换后重试");
+                            }
+                        }
+                    } catch (Exception ex) {
+                        log.error("自定义NSFW校验服务调用异常: {}", ex.getMessage());
+                    }
                 }
 
                 boolean isSafe = wxMaService.getSecCheckService().checkImage(tempFile);
