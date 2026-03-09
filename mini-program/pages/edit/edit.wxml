@@ -62,11 +62,4 @@
     />
   </view>
 
-  <!-- 全局 Loading 遮罩 -->
-  <view class="loading-overlay" wx:if="{{isLoading}}" catchtouchmove="preventTouchMove">
-    <view class="loading-glass-box">
-      <view class="spinner"></view>
-      <text class="loading-text">魔法正在生效...</text>
-    </view>
-  </view>
 </view>

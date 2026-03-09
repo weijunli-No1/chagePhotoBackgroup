@@ -17,7 +17,7 @@ Page({
   },
 
   onLogin() {
-    wx.showLoading({ title: '登录中...' });
+    wx.showLoading({ title: '登录中...', mask: true });
     app.doLogin()
       .then(res => {
         this.setData({
@@ -25,17 +25,22 @@ Page({
           userInfo: res
         });
         wx.hideLoading();
-        wx.showModal({
-          title: '登录成功',
-          content: '是否立即返回去制作证件照？',
-          confirmText: '去制作',
-          cancelText: '留在本页',
-          success: (mRes) => {
-            if (mRes.confirm) {
-              wx.switchTab({ url: '/pages/index/index' });
+        if (app.globalData.isFromEditForLogin) {
+          app.globalData.isFromEditForLogin = false; // 重置标识
+          wx.showModal({
+            title: '登录成功',
+            content: '是否立即返回去制作证件照？',
+            confirmText: '去制作',
+            cancelText: '留在本页',
+            success: (mRes) => {
+              if (mRes.confirm) {
+                wx.switchTab({ url: '/pages/index/index' });
+              }
             }
-          }
-        });
+          });
+        } else {
+          wx.showToast({ title: '登录成功', icon: 'success' });
+        }
       })
       .catch(err => {
         wx.hideLoading();

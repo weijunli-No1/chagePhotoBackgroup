@@ -63,7 +63,7 @@ Page({
       confirmColor: '#d52828',
       success: (res) => {
         if (res.confirm) {
-          wx.showLoading({ title: '删除中' });
+          wx.showLoading({ title: '删除中...', mask: true });
           wx.request({
             url: `${app.globalData.baseUrl}/api/history/${id}`,
             method: 'DELETE',

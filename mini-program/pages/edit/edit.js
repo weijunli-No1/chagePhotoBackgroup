@@ -5,7 +5,6 @@ Page({
     selectedImage: '',      // 用户选择的原始图像
     transparentBase64: '',  // 透明底的 Base64 图像
     coloredBase64: '',      // 最终上色的 Base64 图像
-    isLoading: false,       // 是否在处理中
     showColorPicker: false, // 是否展示颜色选择器
     colorPickerVisible: false, // 颜色盘是否可见
     isCustomColor: false, // 当前是否选用自定义颜色
@@ -44,9 +43,6 @@ Page({
     }
   },
 
-  // 阻止滑动穿透
-  preventTouchMove() {
-  },
 
   // 选择尺寸
   onSizeSelect(e) {
@@ -65,7 +61,7 @@ Page({
 
   // 1. 生成透明图片
   processTransparentImage(filePath) {
-    this.setData({ isLoading: true });
+    wx.showLoading({ title: '魔法正在生效...', mask: true });
     
     // 获取当期选中的尺寸参数
     const sizeObj = this.data.presetSizes[this.data.currentSizeIndex];
@@ -102,7 +98,7 @@ Page({
         wx.showToast({ title: '请求失败', icon: 'none' });
       },
       complete: () => {
-        this.setData({ isLoading: false });
+        wx.hideLoading();
       }
     });
   },
@@ -111,7 +107,8 @@ Page({
   changeBackgroundColor(color) {
     if (!this.data.transparentBase64) return;
     
-    this.setData({ isLoading: true, currentBgColor: color });
+    this.setData({ currentBgColor: color });
+    wx.showLoading({ title: '魔法正在生效...', mask: true });
 
     wx.request({
       url: `${app.globalData.baseUrl}/api/photo/add-background`,
@@ -138,7 +135,7 @@ Page({
         wx.showToast({ title: '请求失败', icon: 'none' });
       },
       complete: () => {
-        this.setData({ isLoading: false });
+        wx.hideLoading();
       }
     });
   },
@@ -183,7 +180,7 @@ Page({
         content: '请先前往“我的”进行登录',
         success: (res) => {
           if (res.confirm) {
-            wx.switchTab({ url: '/pages/profile/profile' });
+            app.globalData.isFromEditForLogin = true; wx.switchTab({ url: '/pages/profile/profile' });
           }
         }
       });
@@ -192,7 +189,7 @@ Page({
 
     if (!this.data.coloredBase64) return;
 
-    this.setData({ isLoading: true });
+    wx.showLoading({ title: '魔法正在生效...', mask: true });
 
     // 1. 同步保存到历史记录云端
     wx.request({
@@ -215,7 +212,7 @@ Page({
         }
       },
       complete: () => {
-        this.setData({ isLoading: false });
+        wx.hideLoading();
       }
     });
   },
@@ -268,7 +265,7 @@ Page({
   },
 
   recordAdViewAndSave() {
-    this.setData({ isLoading: true });
+    wx.showLoading({ title: '魔法正在生效...', mask: true });
     wx.request({
       url: `${app.globalData.baseUrl}/api/user/recordAd`,
       method: 'POST',
@@ -288,7 +285,7 @@ Page({
         }
       },
       complete: () => {
-        this.setData({ isLoading: false });
+        wx.hideLoading();
       }
     });
   },
@@ -301,7 +298,7 @@ Page({
         content: '请先前往“我的”进行登录',
         success: (res) => {
           if (res.confirm) {
-            wx.switchTab({ url: '/pages/profile/profile' });
+            app.globalData.isFromEditForLogin = true; wx.switchTab({ url: '/pages/profile/profile' });
           }
         }
       });
@@ -310,7 +307,7 @@ Page({
 
     if (!this.data.coloredBase64) return;
 
-    this.setData({ isLoading: true });
+    wx.showLoading({ title: '魔法正在生效...', mask: true });
 
     const sizeObj = this.data.presetSizes[this.data.currentSizeIndex];
 
@@ -342,7 +339,7 @@ Page({
         wx.showToast({ title: '排版请求失败', icon: 'none' });
       },
       complete: () => {
-        this.setData({ isLoading: false });
+        wx.hideLoading();
       }
     });
   },
