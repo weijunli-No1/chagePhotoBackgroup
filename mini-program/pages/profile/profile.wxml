@@ -23,12 +23,12 @@
       </block>
     </view>
 
-    <view class="menu-section card hover-scale">
+    <view class="menu-section card">
       <t-cell-group theme="card" style="margin:0;">
-        <view style="position: relative;">
-          <t-cell title="联系客服" hover leftIcon="service" arrow />
-          <button open-type="contact" class="contact-btn"></button>
-        </view>
+        <button class="contact-cell" open-type="contact" hover-class="contact-cell-hover">
+          <t-icon name="service" size="44rpx" class="contact-icon" />
+          <text class="contact-text">联系客服</text>
+        </button>
         <t-cell title="清空历史缓存" hover bindtap="clearHistory" leftIcon="delete" />
         <t-cell title="隐私安全政策" hover bindtap="navToPrivacy" leftIcon="lock-on" />
         <t-cell title="免责声明与须知" hover bindtap="navToAgreement" leftIcon="info-circle" />

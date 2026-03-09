@@ -26,9 +26,7 @@
   flex-shrink: 0;
   transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
-.avatar-wrap:active {
-  transform: scale(0.9);
-}
+/* avatar-wrap 无 bindtap，:active 规则已移除 */
 @media (prefers-color-scheme: dark) {
   .avatar-wrap { border-color: #333; }
 }

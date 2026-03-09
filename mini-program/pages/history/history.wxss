@@ -98,6 +98,15 @@
   box-shadow: 0 4rpx 16rpx -6rpx rgba(0, 0, 0, 0.04) !important;
 }
 
+.img-hover {
+  opacity: 0.85;
+}
+
+.delete-hover {
+  opacity: 0.6;
+  transform: scale(0.9);
+}
+
 @media (prefers-color-scheme: dark) {
   .history-card {
     background-color: var(--td-bg-color-container, #222222);

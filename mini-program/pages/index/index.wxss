@@ -29,6 +29,7 @@
 .feature-chips {
   display: flex;
   flex-direction: row;
+  flex-wrap: nowrap;
   gap: 16rpx;
 }
 
@@ -43,6 +44,7 @@
   font-size: 24rpx;
   font-weight: 600;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -57,13 +59,13 @@
   flex: 1;
   width: 100%;
   box-sizing: border-box;
-  /* 不使用 backdrop-filter，Skyline 不支持 */
   background: var(--spatial-card);
   border-radius: 48rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 40rpx;
   box-shadow: 0 40rpx 80rpx -20rpx rgba(0,0,0,0.08), inset 0 2rpx 0 rgba(255,255,255,0.6);
   transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   position: relative;
@@ -92,7 +94,7 @@
   bottom: 0;
   border-radius: 48rpx;
   border: 4rpx solid rgba(0, 82, 217, 0.18);
-  pointer-events: none;
+  /* pointer-events: none 在 Skyline 不支持；此元素无 bindtap，点击事件自然冒泡到父容器 */
   box-sizing: border-box;
   z-index: 0;
 }
@@ -157,16 +159,12 @@
   margin-bottom: 12rpx;
   color: var(--spatial-text-main);
   letter-spacing: 1rpx;
-  position: relative;
-  z-index: 1;
 }
 
 .u-tip {
   font-size: 26rpx;
   color: var(--spatial-text-sub);
-  margin-bottom: 56rpx;
-  position: relative;
-  z-index: 1;
+  margin-bottom: 48rpx;
 }
 
 /* ── 步骤引导行 ── */
@@ -178,8 +176,9 @@
   background: rgba(0, 82, 217, 0.05);
   border-radius: 100rpx;
   padding: 20rpx 40rpx;
-  position: relative;
-  z-index: 1;
+  width: 100%;
+  box-sizing: border-box;
+  justify-content: center;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -33,12 +33,12 @@
       <view class="history-grid">
         <!-- hover-class 替代 :active，兼容 Skyline -->
         <view class="history-card hover-scale" hover-class="card-hover" hover-stay-time="100" wx:for="{{historyList}}" wx:key="id">
-          <view class="img-wrap" bindtap="previewImage" data-url="{{item.photoUrl}}">
+          <view class="img-wrap" hover-class="img-hover" hover-stay-time="100" bindtap="previewImage" data-url="{{item.photoUrl}}">
             <image class="thumb" src="{{item.photoUrl}}" mode="aspectFill" lazy-load></image>
           </view>
           <view class="info-action">
             <view class="time">{{item.timeStr}}</view>
-            <view class="delete-btn" data-id="{{item.id}}" bindtap="onDelete">
+            <view class="delete-btn" hover-class="delete-hover" hover-stay-time="100" data-id="{{item.id}}" bindtap="onDelete">
               <t-icon name="delete" size="36rpx" color="#d52828" />
             </view>
           </view>

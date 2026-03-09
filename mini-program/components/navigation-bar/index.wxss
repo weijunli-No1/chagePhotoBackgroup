@@ -4,9 +4,7 @@
   left: 0; 
   width: 100%; 
   z-index: 999; 
-  /* 毛玻璃效果 */
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  /* backdrop-filter 在 Skyline 不支持，已移除；通过 bgColor 传入半透明背景色实现近似效果 */
   transition: background-color 0.3s ease;
 }
 .nav-content { 
@@ -38,6 +36,10 @@
 }
 .left-box {
   padding-left: 24rpx;
+}
+
+.nav-btn-pressed {
+  opacity: 0.5;
 }
 
 @media (prefers-color-scheme: dark) {

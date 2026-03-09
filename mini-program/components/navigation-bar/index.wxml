@@ -7,7 +7,7 @@
   <!-- 导航栏内容 -->
   <view class="nav-content" style="height:{{contentHeight}}px; line-height:{{contentHeight}}px;">
     <!-- 左侧占位（如有需要可添加返回按钮） -->
-    <view class="left-box" bindtap="goBack">
+    <view class="left-box" hover-class="nav-btn-pressed" hover-stay-time="80" bindtap="goBack">
       <t-icon wx:if="{{showBack}}" name="chevron-left" size="48rpx" color="{{titleColor}}" class="back-icon" />
     </view>
     <text class="nav-title" style="color:{{titleColor}};">{{title}}</text>

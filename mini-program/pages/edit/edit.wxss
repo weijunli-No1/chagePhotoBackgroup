@@ -34,8 +34,7 @@
   position: relative;
   width: 100%;
   background: var(--spatial-card);
-  backdrop-filter: blur(80rpx) saturate(150%);
-  -webkit-backdrop-filter: blur(80rpx) saturate(150%);
+  /* backdrop-filter 在 Skyline 不支持，已移除 */
   border-radius: 0;
   padding: 32rpx 0;
   padding-bottom: max(32rpx, env(safe-area-inset-bottom));
@@ -146,7 +145,8 @@
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   border: 6rpx solid transparent;
 }
-.color-node:active { transform: scale(0.9); }
+/* :active 在 Skyline 不支持，用 hover-class="node-pressed" 替代 */
+.node-pressed .color-node { transform: scale(0.9); }
 
 .node-active {
   transform: scale(1.15) !important;
