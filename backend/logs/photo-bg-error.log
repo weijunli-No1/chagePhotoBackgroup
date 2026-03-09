@@ -1010,3 +1010,5 @@ java.lang.RuntimeException: 微信鉴权失败
 2026-03-09 15:25:16.608 [http-nio-8080-exec-2] ERROR com.photo.bg.controller.PhotoController - 自定义NSFW校验服务调用异常: ConnectException: Connection refused
 2026-03-09 15:25:19.547 [http-nio-8080-exec-4] ERROR com.photo.bg.controller.PhotoController - 自定义NSFW校验服务调用异常: ConnectException: Connection refused
 2026-03-09 15:25:22.423 [http-nio-8080-exec-6] ERROR com.photo.bg.controller.PhotoController - 自定义NSFW校验服务调用异常: ConnectException: Connection refused
+2026-03-09 15:37:39.807 [http-nio-8080-exec-4] ERROR com.photo.bg.controller.PhotoController - 自定义NSFW校验服务调用异常: ConnectException: Connection refused
+2026-03-09 15:42:58.809 [http-nio-8080-exec-2] ERROR com.photo.bg.controller.PhotoController - 自定义NSFW校验服务调用异常: ConnectException: Connection refused

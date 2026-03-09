@@ -1,24 +1,59 @@
 <view class="page-wrap">
   <navigation-bar title="证件照制作" />
   <view class="main-canvas">
+
+    <!-- Slogan + 功能亮点 -->
     <view class="hero-block">
-      <view class="hero-title">证件照制作</view>
-      <view class="hero-subtitle">智能抠图，一键换底色</view>
+      <view class="hero-subtitle">智能抠图 · 一键换背景 · 多种尺寸</view>
+      <view class="feature-chips">
+        <view class="chip">
+          <t-icon name="lightning-bolt" size="28rpx" />
+          <text>极速 AI</text>
+        </view>
+        <view class="chip">
+          <t-icon name="image" size="28rpx" />
+          <text>一键换底色</text>
+        </view>
+        <view class="chip">
+          <t-icon name="print" size="28rpx" />
+          <text>多规格排版</text>
+        </view>
+      </view>
     </view>
 
+    <!-- 上传操作台 -->
     <view class="upload-island hover-scale" bindtap="chooseImage">
       <view class="upload-icon-wrap">
         <view class="upload-icon">
           <t-icon name="camera" size="80rpx" />
         </view>
       </view>
-      <view class="u-text">拍照或上传照片</view>
+      <view class="u-text">上传 / 拍摄照片</view>
       <view class="u-tip">请确保正面光线充足、面部清晰</view>
+
+      <!-- 卡片内底部步骤引导 -->
+      <view class="steps-row">
+        <view class="step-item">
+          <view class="step-num">1</view>
+          <text class="step-label">选照片</text>
+        </view>
+        <view class="step-arrow">→</view>
+        <view class="step-item">
+          <view class="step-num">2</view>
+          <text class="step-label">AI 处理</text>
+        </view>
+        <view class="step-arrow">→</view>
+        <view class="step-item">
+          <view class="step-num">3</view>
+          <text class="step-label">保存</text>
+        </view>
+      </view>
     </view>
 
+    <!-- 安全提示 -->
     <view class="privacy-tag">
-      <t-icon name="cloud" size="30rpx" class="privacy-icon"/>
-      <text>云端 AI 智能处理，极速生成不留痕</text>
+      <t-icon name="cloud" size="28rpx" class="privacy-icon"/>
+      <text>云端 AI 处理，极速生成不留痕</text>
     </view>
   </view>
 </view>
