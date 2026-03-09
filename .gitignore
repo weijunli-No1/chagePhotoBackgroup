@@ -1,0 +1,8 @@
+# 日志文件
+backend/logs/
+
+# Java 编译产物
+backend/target/
+
+# macOS
+.DS_Store
