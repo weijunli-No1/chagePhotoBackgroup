@@ -1005,3 +1005,8 @@ java.lang.RuntimeException: 微信鉴权失败
 	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
 	at java.base/java.lang.Thread.run(Thread.java:840)
+2026-03-09 15:13:48.338 [http-nio-8080-exec-5] ERROR com.photo.bg.controller.PhotoController - 自定义NSFW校验服务调用异常: ConnectException: Connection refused
+2026-03-09 15:25:11.786 [http-nio-8080-exec-10] ERROR com.photo.bg.controller.PhotoController - 自定义NSFW校验服务调用异常: ConnectException: Connection refused
+2026-03-09 15:25:16.608 [http-nio-8080-exec-2] ERROR com.photo.bg.controller.PhotoController - 自定义NSFW校验服务调用异常: ConnectException: Connection refused
+2026-03-09 15:25:19.547 [http-nio-8080-exec-4] ERROR com.photo.bg.controller.PhotoController - 自定义NSFW校验服务调用异常: ConnectException: Connection refused
+2026-03-09 15:25:22.423 [http-nio-8080-exec-6] ERROR com.photo.bg.controller.PhotoController - 自定义NSFW校验服务调用异常: ConnectException: Connection refused

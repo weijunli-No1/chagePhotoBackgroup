@@ -66,9 +66,6 @@
 .menu-section {
   padding: 16rpx 0;
 }
-.t-cell-group--card {
-  margin: 0 !important;
-}
 .contact-btn {
   position: absolute;
   top: 0;
