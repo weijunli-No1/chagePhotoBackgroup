@@ -57,66 +57,70 @@
   flex: 1;
   width: 100%;
   box-sizing: border-box;
+  /* 不使用 backdrop-filter，Skyline 不支持 */
   background: var(--spatial-card);
-  backdrop-filter: blur(40rpx);
-  -webkit-backdrop-filter: blur(40rpx);
   border-radius: 48rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   box-shadow: 0 40rpx 80rpx -20rpx rgba(0,0,0,0.08), inset 0 2rpx 0 rgba(255,255,255,0.6);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   position: relative;
+  overflow: hidden;
 }
 
-.upload-island::after {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  border-radius: inherit;
-  border: 4rpx dashed var(--spatial-brand-shadow);
-  pointer-events: none;
-  box-sizing: border-box;
-  opacity: 0.7;
-}
-
-.upload-island:active {
-  transform: scale(0.96);
-}
-
-.upload-island:active::after {
-  border-color: var(--spatial-brand);
-  opacity: 1;
+/* Skyline hover-class 替代 :active */
+.island-pressed {
+  transform: scale(0.96) !important;
+  opacity: 0.92;
 }
 
 @media (prefers-color-scheme: dark) {
   .upload-island {
-    background: rgba(40, 40, 45, 0.55);
-    box-shadow: 0 40rpx 80rpx -20rpx rgba(0,0,0,0.5), inset 0 2rpx 0 rgba(255,255,255,0.05);
-  }
-  .upload-island::after {
-    border-color: rgba(255, 255, 255, 0.15);
+    background: var(--spatial-card);
+    box-shadow: 0 40rpx 80rpx -20rpx rgba(0,0,0,0.5), inset 0 2rpx 0 rgba(255,255,255,0.04);
   }
 }
 
-/* ── Icon wrap with pulse ── */
+/* 虚线描边：真实 view 替代 ::after 伪元素 */
+.island-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 48rpx;
+  border: 4rpx solid rgba(0, 82, 217, 0.18);
+  pointer-events: none;
+  box-sizing: border-box;
+  z-index: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .island-border {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* ── 脉冲圆圈：真实 view 替代 ::before 伪元素 ── */
 .upload-icon-wrap {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 40rpx;
+  /* 给 pulse-ring 提供定位上下文 */
 }
 
-.upload-icon-wrap::before {
-  content: "";
+.pulse-ring {
   position: absolute;
   width: 220rpx;
   height: 220rpx;
   background: var(--spatial-brand);
   border-radius: 50%;
   animation: pulse 2.5s infinite ease-in-out;
+  opacity: 0.15;
 }
 
 @keyframes pulse {
@@ -134,7 +138,7 @@
   align-items: center;
   justify-content: center;
   color: var(--spatial-brand);
-  box-shadow: 0 16rpx 40rpx -12rpx rgba(0, 82, 217, 0.25), inset 0 4rpx 8rpx rgba(255,255,255,0.8);
+  box-shadow: 0 16rpx 40rpx -12rpx rgba(0, 82, 217, 0.25);
   position: relative;
   z-index: 1;
 }
@@ -142,7 +146,7 @@
 @media (prefers-color-scheme: dark) {
   .upload-icon {
     background: linear-gradient(135deg, rgba(59,130,246,0.2) 0%, rgba(59,130,246,0.05) 100%);
-    box-shadow: 0 16rpx 40rpx -12rpx rgba(59, 130, 246, 0.4), inset 0 4rpx 8rpx rgba(255,255,255,0.1);
+    box-shadow: 0 16rpx 40rpx -12rpx rgba(59, 130, 246, 0.4);
     color: #60a5fa;
   }
 }
@@ -153,12 +157,16 @@
   margin-bottom: 12rpx;
   color: var(--spatial-text-main);
   letter-spacing: 1rpx;
+  position: relative;
+  z-index: 1;
 }
 
 .u-tip {
   font-size: 26rpx;
   color: var(--spatial-text-sub);
   margin-bottom: 56rpx;
+  position: relative;
+  z-index: 1;
 }
 
 /* ── 步骤引导行 ── */
@@ -170,6 +178,8 @@
   background: rgba(0, 82, 217, 0.05);
   border-radius: 100rpx;
   padding: 20rpx 40rpx;
+  position: relative;
+  z-index: 1;
 }
 
 @media (prefers-color-scheme: dark) {

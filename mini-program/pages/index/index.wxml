@@ -22,8 +22,14 @@
     </view>
 
     <!-- 上传操作台 -->
-    <view class="upload-island hover-scale" bindtap="chooseImage">
+    <!-- hover-class 替代 :active，兼容 Skyline -->
+    <view class="upload-island" hover-class="island-pressed" hover-stay-time="100" bindtap="chooseImage">
+      <!-- 虚线描边边框：真实 view 替代 ::after 伪元素 -->
+      <view class="island-border"></view>
+
       <view class="upload-icon-wrap">
+        <!-- 脉冲圆圈：真实 view 替代 ::before 伪元素 -->
+        <view class="pulse-ring"></view>
         <view class="upload-icon">
           <t-icon name="camera" size="80rpx" />
         </view>
@@ -31,7 +37,7 @@
       <view class="u-text">上传 / 拍摄照片</view>
       <view class="u-tip">请确保正面光线充足、面部清晰</view>
 
-      <!-- 卡片内底部步骤引导 -->
+      <!-- 步骤引导 -->
       <view class="steps-row">
         <view class="step-item">
           <view class="step-num">1</view>

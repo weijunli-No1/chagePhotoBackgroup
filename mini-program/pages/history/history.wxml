@@ -12,7 +12,9 @@
       </view>
     </block>
     <block wx:elif="{{isLoading && historyList.length === 0}}">
-      <view class="center-wrap"><t-loading theme="circular" size="60rpx" text="加载中..." /></view>
+      <view class="center-wrap">
+        <t-loading theme="circular" size="60rpx" text="加载中..." />
+      </view>
     </block>
     <block wx:elif="{{historyList.length === 0}}">
       <view class="modern-empty-wrap">
@@ -29,7 +31,8 @@
         <t-notice-bar visible="true" marquee="{{marquee}}" content="云端历史记录最多保留7天，请及时保存" theme="info" prefixIcon="error-circle" />
       </view>
       <view class="history-grid">
-        <view class="history-card hover-scale" wx:for="{{historyList}}" wx:key="id">
+        <!-- hover-class 替代 :active，兼容 Skyline -->
+        <view class="history-card hover-scale" hover-class="card-hover" hover-stay-time="100" wx:for="{{historyList}}" wx:key="id">
           <view class="img-wrap" bindtap="previewImage" data-url="{{item.photoUrl}}">
             <image class="thumb" src="{{item.photoUrl}}" mode="aspectFill" lazy-load></image>
           </view>
