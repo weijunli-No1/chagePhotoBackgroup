@@ -15,6 +15,7 @@ public class WxMaConfiguration {
 
     private String appid;
     private String secret;
+    private String rewardedAdUnitId;
 
     @Bean
     public WxMaService wxMaService() {

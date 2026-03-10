@@ -233,11 +233,23 @@ Page({
 
   playVideoAd() {
     if (wx.createRewardedVideoAd) {
+      const adUnitId = app.globalData.rewardedVideoAdUnitId || app.globalData.defaultRewardedVideoAdUnitId || '';
+      if (!adUnitId) {
+        wx.showToast({ title: '广告配置缺失，请稍后再试', icon: 'none' });
+        return;
+      }
+
       if (!this.videoAd) {
         this.videoAd = wx.createRewardedVideoAd({
-          adUnitId: 'adunit-e1926463d0f7c2af' // 请替换为实际的微信小程序视频广告ID
+          adUnitId: adUnitId
+        });
+      } else if (this.videoAdUnitId !== adUnitId) {
+        // 后端配置更新后，重建实例确保使用最新广告位
+        this.videoAd = wx.createRewardedVideoAd({
+          adUnitId: adUnitId
         });
       }
+      this.videoAdUnitId = adUnitId;
 
       const closeHandler = (res) => {
         if (res && res.isEnded) {
