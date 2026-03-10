@@ -171,7 +171,7 @@
 .steps-row {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   gap: 16rpx;
   background: rgba(0, 82, 217, 0.05);
   border-radius: 100rpx;
@@ -218,10 +218,17 @@
 }
 
 .step-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36rpx;
+  height: 44rpx;
+  line-height: 44rpx;
+  flex-shrink: 0;
   font-size: 28rpx;
   color: var(--spatial-text-sub);
   opacity: 0.5;
-  padding-bottom: 20rpx;
+  padding-bottom: 0;
 }
 
 /* ── 安全标签 ── */
