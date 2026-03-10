@@ -3,6 +3,7 @@ backend/logs/
 
 # Java 编译产物
 backend/target/
+**/target/
 
 # macOS
 .DS_Store
