@@ -32,6 +32,11 @@ Page({
   },
 
   onLoad(options) {
+    // 用于保证换底色时仅最新请求可关闭 loading，避免并发请求导致 loading 提前消失
+    this._bgReqSeq = 0;
+    this._activeBgReqId = 0;
+    this._customColorDebounceTimer = null;
+
     if (options.src) {
       this.setData({
         selectedImage: decodeURIComponent(options.src)
@@ -40,6 +45,13 @@ Page({
       this.processTransparentImage(this.data.selectedImage);
     } else {
       wx.navigateBack();
+    }
+  },
+
+  onUnload() {
+    if (this._customColorDebounceTimer) {
+      clearTimeout(this._customColorDebounceTimer);
+      this._customColorDebounceTimer = null;
     }
   },
 
@@ -106,8 +118,12 @@ Page({
   // 2. 变换背景色API调用
   changeBackgroundColor(color) {
     if (!this.data.transparentBase64) return;
-    
+
+    const previousColor = this.data.currentBgColor;
     this.setData({ currentBgColor: color });
+
+    const requestId = ++this._bgReqSeq;
+    this._activeBgReqId = requestId;
     wx.showLoading({ title: '魔法正在生效...', mask: true });
 
     wx.request({
@@ -121,20 +137,28 @@ Page({
         color: color
       },
       success: (res) => {
-        if (res.data.code === 200) {
+        // 只处理最新一次请求的结果，避免旧请求覆盖新结果
+        if (requestId !== this._activeBgReqId) return;
+
+        if (res.data && res.data.code === 200 && res.data.data) {
           let base64 = res.data.data.image_base64 || '';
           base64 = base64.replace(/^data:image\/\w+;base64,/, '').replace(/[\r\n\s]/g, '');
           this.setData({
             coloredBase64: base64
           });
         } else {
-          wx.showToast({ title: '换底色失败', icon: 'none' });
+          // 失败兜底：回退到上一次背景色，避免界面状态和图片结果不一致
+          this.setData({ currentBgColor: previousColor });
+          wx.showToast({ title: (res.data && res.data.message) || '换底色失败，请重试', icon: 'none' });
         }
       },
       fail: () => {
-        wx.showToast({ title: '请求失败', icon: 'none' });
+        if (requestId !== this._activeBgReqId) return;
+        this.setData({ currentBgColor: previousColor });
+        wx.showToast({ title: '网络异常，已恢复上次颜色', icon: 'none' });
       },
       complete: () => {
+        if (requestId !== this._activeBgReqId) return;
         wx.hideLoading();
       }
     });
@@ -143,6 +167,8 @@ Page({
   // 点击选择颜色
   onColorSelect(e) {
     const color = e.currentTarget.dataset.color;
+    if (color === this.data.currentBgColor) return;
+
     this.setData({ isCustomColor: false });
     this.changeBackgroundColor(color);
   },
@@ -164,7 +190,15 @@ Page({
       isCustomColor: true,
       currentBgColor: color
     });
-    this.changeBackgroundColor(color);
+
+    // 色盘拖动会高频触发 change，这里做防抖避免并发请求过多造成 loading 闪烁
+    if (this._customColorDebounceTimer) {
+      clearTimeout(this._customColorDebounceTimer);
+    }
+    this._customColorDebounceTimer = setTimeout(() => {
+      this.changeBackgroundColor(color);
+      this._customColorDebounceTimer = null;
+    }, 200);
   },
 
   // 放弃重选，返回上一页
