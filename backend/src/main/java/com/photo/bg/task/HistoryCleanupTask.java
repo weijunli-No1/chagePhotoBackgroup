@@ -12,10 +12,15 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * 历史证件照清理定时任务。
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class HistoryCleanupTask {
+
+    private static final int HISTORY_RETENTION_DAYS = 7;
 
     private final PhotoHistoryMapper photoHistoryMapper;
     private final MinioStorageService minioStorageService;
@@ -26,8 +31,8 @@ public class HistoryCleanupTask {
      */
     @Scheduled(cron = "0 0 0 * * ?")
     public void cleanupOldHistory() {
-        log.info("开始执行定时任务：清理 7 天前的历史证件照记录...");
-        LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
+        log.info("开始执行定时任务：清理 {} 天前的历史证件照记录...", HISTORY_RETENTION_DAYS);
+        LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(HISTORY_RETENTION_DAYS);
         
         LambdaQueryWrapper<PhotoHistory> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.le(PhotoHistory::getCreateTime, sevenDaysAgo);

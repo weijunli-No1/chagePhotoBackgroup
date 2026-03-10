@@ -9,8 +9,13 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
+/**
+ * 用户每日配额服务实现。
+ */
 @Service
 public class UserDailyUsageServiceImpl extends ServiceImpl<UserDailyUsageMapper, UserDailyUsage> implements UserDailyUsageService {
+
+    private static final int MAX_DAILY_SAVE_COUNT = 5;
 
     @Override
     public UserDailyUsage getOrCreateUsage(Long userId, LocalDate date) {
@@ -31,13 +36,10 @@ public class UserDailyUsageServiceImpl extends ServiceImpl<UserDailyUsageMapper,
     @Override
     public boolean checkSaveConstraint(Long userId, LocalDate date) {
         UserDailyUsage usage = getOrCreateUsage(userId, date);
-        if (usage.getAdViewCount() >= 5) {
+        if (usage.getAdViewCount() >= MAX_DAILY_SAVE_COUNT) {
             return true;
         }
-        if (usage.getSaveCount() < 5 + usage.getAdViewCount()) {
-            return true;
-        }
-        return false;
+        return usage.getSaveCount() < MAX_DAILY_SAVE_COUNT + usage.getAdViewCount();
     }
 
     @Override

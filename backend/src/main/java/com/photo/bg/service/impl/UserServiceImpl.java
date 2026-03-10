@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+/**
+ * 用户服务实现。
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -20,6 +23,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     private final WxMaService wxMaService;
 
+    /**
+     * 根据微信登录临时凭证进行登录，首次登录自动注册。
+     *
+     * @param code 微信登录临时凭证
+     * @return 用户实体
+     */
     @Override
     public User loginOrRegister(String code) {
         try {

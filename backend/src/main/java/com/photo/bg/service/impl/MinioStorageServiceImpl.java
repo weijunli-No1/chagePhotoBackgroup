@@ -21,14 +21,22 @@ import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * MinIO 文件存储服务实现。
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class MinioStorageServiceImpl implements MinioStorageService {
 
+    private static final long MINIO_PART_SIZE = 10 * 1024 * 1024L;
+
     private final MinioClient minioClient;
     private final MinioConfig minioConfig;
 
+    /**
+     * 初始化存储桶与读策略。
+     */
     @PostConstruct
     public void init() {
         try {
@@ -48,6 +56,9 @@ public class MinioStorageServiceImpl implements MinioStorageService {
         }
     }
 
+    /**
+     * 上传 Base64 图片到 MinIO。
+     */
     @Override
     public String uploadBase64(String base64, String extension) {
         if (StrUtil.isBlank(base64)) {
@@ -74,6 +85,9 @@ public class MinioStorageServiceImpl implements MinioStorageService {
         return uploadFile(bais, objectName, contentType);
     }
 
+    /**
+     * 上传文件流到 MinIO。
+     */
     @Override
     public String uploadFile(InputStream inputStream, String objectName, String contentType) {
         try {
@@ -81,7 +95,7 @@ public class MinioStorageServiceImpl implements MinioStorageService {
                     PutObjectArgs.builder()
                             .bucket(minioConfig.getBucketName())
                             .object(objectName)
-                            .stream(inputStream, inputStream.available(), -1)
+                            .stream(inputStream, -1, MINIO_PART_SIZE)
                             .contentType(contentType)
                             .build()
             );
@@ -93,6 +107,9 @@ public class MinioStorageServiceImpl implements MinioStorageService {
         }
     }
 
+    /**
+     * 根据访问 URL 删除 MinIO 文件。
+     */
     @Override
     public void deleteFile(String fileUrl) {
         if (StrUtil.isBlank(fileUrl)) return;

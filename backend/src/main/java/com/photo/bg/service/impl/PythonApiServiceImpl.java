@@ -4,6 +4,7 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.TypeReference;
 import com.photo.bg.service.PythonApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,16 +12,24 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Python 图像处理服务实现。
+ */
 @Slf4j
 @Service
 public class PythonApiServiceImpl implements PythonApiService {
 
+    private static final TypeReference<Map<String, Object>> MAP_TYPE_REFERENCE = new TypeReference<Map<String, Object>>() {
+    };
+
     @Value("${python-api.base-url}")
     private String baseUrl;
 
+    /**
+     * 调用 Python 服务生成人像抠图结果。
+     */
     @Override
     public Map<String, Object> generateIdPhoto(MultipartFile file, Integer height, Integer width) {
         String url = baseUrl + "/idphoto";
@@ -39,9 +48,9 @@ public class PythonApiServiceImpl implements PythonApiService {
             }
             
             HttpResponse response = request.execute();
-                    
+
             if (response.isOk()) {
-                return JSON.parseObject(response.body(), Map.class);
+                return JSON.parseObject(response.body(), MAP_TYPE_REFERENCE);
             } else {
                 log.error("调用Python接口 idphoto 失败: {}", response.body());
                 throw new RuntimeException("处理图像失败");
@@ -52,17 +61,20 @@ public class PythonApiServiceImpl implements PythonApiService {
         }
     }
 
+    /**
+     * 调用 Python 服务进行背景换色。
+     */
     @Override
     public Map<String, Object> addBackground(String base64Image, String color) {
         String url = baseUrl + "/add_background";
         try {
             HttpResponse response = HttpRequest.post(url)
                     .form("input_image_base64", base64Image)
-                    .form("color", color.replace("#", "")) // Python端可能不需要#
+                    .form("color", color.replace("#", ""))
                     .execute();
-                    
+
             if (response.isOk()) {
-                return JSON.parseObject(response.body(), Map.class);
+                return JSON.parseObject(response.body(), MAP_TYPE_REFERENCE);
             } else {
                 log.error("调用Python接口 add_background 失败: {}", response.body());
                 throw new RuntimeException("处理图像失败");
@@ -73,6 +85,9 @@ public class PythonApiServiceImpl implements PythonApiService {
         }
     }
 
+    /**
+     * 调用 Python 服务生成排版照。
+     */
     @Override
     public Map<String, Object> generateLayoutPhotos(String base64Image, Integer height, Integer width) {
         String url = baseUrl + "/generate_layout_photos";
@@ -88,9 +103,9 @@ public class PythonApiServiceImpl implements PythonApiService {
             }
             
             HttpResponse response = request.execute();
-            
+
             if (response.isOk()) {
-                return JSON.parseObject(response.body(), Map.class);
+                return JSON.parseObject(response.body(), MAP_TYPE_REFERENCE);
             } else {
                 log.error("调用Python接口 generate_layout_photos 失败: {}", response.body());
                 throw new RuntimeException("处理排版图像失败");

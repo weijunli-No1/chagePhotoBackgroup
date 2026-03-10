@@ -16,11 +16,19 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDate;
 import java.util.Map;
 
+/**
+ * 证件照图片处理相关接口。
+ */
 @RestController
 @RequestMapping("/api/photo")
 @RequiredArgsConstructor
 @Slf4j
 public class PhotoController {
+
+    private static final Integer BAD_REQUEST_CODE = 400;
+    private static final Integer SAVE_LIMIT_REACHED_CODE = 4031;
+    private static final Integer WX_RISK_CONTENT_CODE = 87014;
+    private static final float MAX_IMAGE_EDGE_LENGTH = 800f;
 
     private final PythonApiService pythonApiService;
     private final UserService userService;
@@ -33,6 +41,14 @@ public class PhotoController {
     @Value("${nsfw.api-url:http://127.0.0.1:3006/checkImg}")
     private String nsfwApiUrl;
 
+    /**
+     * 上传并生成人像抠图（透明底）证件照。
+     *
+     * @param file 上传文件
+     * @param height 目标高度（可选）
+     * @param width 目标宽度（可选）
+     * @return 证件照结果
+     */
     @PostMapping("/generate-idphoto")
     public Result<Map<String, Object>> generateIdPhoto(
             @RequestParam("file") MultipartFile file,
@@ -47,10 +63,9 @@ public class PhotoController {
             if (img != null) {
                 int w = img.getWidth();
                 int h = img.getHeight();
-                float maxLen = 800f;
                 // 压缩图片以满足微信检测大小限制（1MB内）
-                if (w > maxLen || h > maxLen) {
-                    float ratio = maxLen / Math.max(w, h);
+                if (w > MAX_IMAGE_EDGE_LENGTH || h > MAX_IMAGE_EDGE_LENGTH) {
+                    float ratio = MAX_IMAGE_EDGE_LENGTH / Math.max(w, h);
                     cn.hutool.core.img.ImgUtil.scale(img, tempFile, ratio);
                 } else {
                     cn.hutool.core.img.ImgUtil.write(img, tempFile);
@@ -66,30 +81,32 @@ public class PhotoController {
                         if (resObj.getInt("code") == 0) {
                             cn.hutool.json.JSONObject dataObj = resObj.getJSONObject("data");
                             if (dataObj != null && !dataObj.getBool("isSafe", true)) {
-                                return Result.error(400, "图片存在不合规风险，请更换后重试");
+                                return Result.error(BAD_REQUEST_CODE, "图片存在不合规风险，请更换后重试");
                             }
                         }
                     } catch (Exception ex) {
-                        log.error("自定义NSFW校验服务调用异常: {}", ex.getMessage());
+                        log.error("自定义NSFW校验服务调用异常", ex);
                     }
                 }
 
                 boolean isSafe = wxMaService.getSecCheckService().checkImage(tempFile);
                 if (!isSafe) {
-                    return Result.error(400, "图片包含敏感内容，请更换后重试");
+                    return Result.error(BAD_REQUEST_CODE, "图片包含敏感内容，请更换后重试");
                 }
             }
         } catch (me.chanjar.weixin.common.error.WxErrorException e) {
-            log.error("微信敏感检查异常: {}", e.getMessage());
-            // 87014 是微信定义的风险内容错误码
-            if (e.getError().getErrorCode() == 87014) {
-                return Result.error(400, "图片包含违规内容(涉黄/涉暴/涉政)，请更换后重试");
+            log.error("微信敏感检查异常", e);
+            if (e.getError().getErrorCode() == WX_RISK_CONTENT_CODE) {
+                return Result.error(BAD_REQUEST_CODE, "图片包含违规内容(涉黄/涉暴/涉政)，请更换后重试");
             }
         } catch (Exception e) {
-            log.error("图片敏感度校验过程发生异常: {}", e.getMessage());
+            log.error("图片敏感度校验过程发生异常", e);
         } finally {
             if (tempFile != null && tempFile.exists()) {
-                tempFile.delete();
+                boolean deleted = tempFile.delete();
+                if (!deleted) {
+                    log.warn("临时文件删除失败: {}", tempFile.getAbsolutePath());
+                }
             }
         }
 
@@ -105,6 +122,15 @@ public class PhotoController {
         return Result.success(result);
     }
 
+    /**
+     * 生成证件照排版图。
+     *
+     * @param openid 用户 openid（可选）
+     * @param base64Image Base64 图片数据
+     * @param height 目标高度（可选）
+     * @param width 目标宽度（可选）
+     * @return 排版图结果
+     */
     @PostMapping("/generate-layout")
     public Result<Map<String, Object>> generateLayoutPhotos(
             @RequestParam(value = "openid", required = false) String openid,
@@ -118,7 +144,7 @@ public class PhotoController {
                 LocalDate today = LocalDate.now();
                 boolean canSave = userDailyUsageService.checkSaveConstraint(user.getId(), today);
                 if (!canSave) {
-                    return Result.error(4031, "今日免费保存次数已达上限");
+                    return Result.error(SAVE_LIMIT_REACHED_CODE, "今日免费保存次数已达上限");
                 }
                 userDailyUsageService.recordSave(user.getId(), today);
             }

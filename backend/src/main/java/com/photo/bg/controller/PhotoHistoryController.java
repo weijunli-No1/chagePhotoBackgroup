@@ -16,35 +16,43 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * 证件照历史记录管理接口。
+ */
 @RestController
 @RequestMapping("/api/history")
 @RequiredArgsConstructor
 public class PhotoHistoryController {
+
+    private static final Integer UNAUTHORIZED_CODE = 401;
+    private static final Integer SAVE_LIMIT_REACHED_CODE = 4031;
 
     private final PhotoHistoryService photoHistoryService;
     private final MinioStorageService minioStorageService;
     private final UserService userService;
     private final UserDailyUsageService userDailyUsageService;
 
+    /**
+     * 保存证件照历史记录。
+     *
+     * @param param 保存参数
+     * @return 保存后的历史记录
+     */
     @PostMapping("/save")
     public Result<PhotoHistory> saveHistory(@RequestBody HistorySaveParam param) {
-        // 1. 查找用户
         User user = userService.getOne(new LambdaQueryWrapper<User>().eq(User::getOpenid, param.getOpenid()));
         if (user == null) {
-            return Result.error(401, "用户未登录");
+            return Result.error(UNAUTHORIZED_CODE, "用户未登录");
         }
 
-        // Check save constraint
         LocalDate today = LocalDate.now();
         boolean canSave = userDailyUsageService.checkSaveConstraint(user.getId(), today);
         if (!canSave) {
-            return Result.error(4031, "今日免费保存次数已达上限，请观看广告后继续保存");
+            return Result.error(SAVE_LIMIT_REACHED_CODE, "今日免费保存次数已达上限，请观看广告后继续保存");
         }
 
-        // 2. 将base64图片上传到MinIO
         String photoUrl = minioStorageService.uploadBase64(param.getBase64Image(), ".png");
 
-        // 3. 落库记录
         PhotoHistory history = new PhotoHistory();
         history.setUserId(user.getId());
         history.setPhotoUrl(photoUrl);
@@ -55,17 +63,22 @@ public class PhotoHistoryController {
         
         photoHistoryService.save(history);
         
-        // record save usage
         userDailyUsageService.recordSave(user.getId(), today);
 
         return Result.success(history);
     }
 
+    /**
+     * 查询用户历史证件照。
+     *
+     * @param openid 用户 openid
+     * @return 历史记录列表
+     */
     @GetMapping("/list")
     public Result<List<PhotoHistory>> listHistory(@RequestParam String openid) {
         User user = userService.getOne(new LambdaQueryWrapper<User>().eq(User::getOpenid, openid));
         if (user == null) {
-            return Result.error(401, "用户未登录");
+            return Result.error(UNAUTHORIZED_CODE, "用户未登录");
         }
 
         List<PhotoHistory> list = photoHistoryService.list(
@@ -77,6 +90,12 @@ public class PhotoHistoryController {
         return Result.success(list);
     }
 
+    /**
+     * 删除指定历史记录。
+     *
+     * @param id 历史记录主键
+     * @return 删除结果
+     */
     @DeleteMapping("/{id}")
     public Result<Boolean> deleteHistory(@PathVariable Long id) {
         boolean removed = photoHistoryService.removeById(id);

@@ -2,15 +2,19 @@ package com.photo.bg.aspect;
 
 import com.alibaba.fastjson2.JSON;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Web 请求日志切面。
+ */
 @Aspect
 @Component
 @Slf4j
@@ -24,7 +28,11 @@ public class LogAspect {
     }
 
     /**
-     * 环绕通知
+     * 统一打印控制层调用日志。
+     *
+     * @param proceedingJoinPoint 切点
+     * @return 方法执行结果
+     * @throws Throwable 执行异常
      */
     @Around("webLog()")
     public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
@@ -44,9 +52,9 @@ public class LogAspect {
             log.info("Class Method   : {}.{}", proceedingJoinPoint.getSignature().getDeclaringTypeName(), proceedingJoinPoint.getSignature().getName());
             // 打印请求的 IP
             log.info("IP             : {}", request.getRemoteAddr());
-            // 打印请求入参（过滤掉 HttpServletRequest 和 HttpServletResponse 和 MultipartFile）
+            // 打印请求入参（过滤 Servlet 对象和文件对象）
             Object[] args = proceedingJoinPoint.getArgs();
-            Object[] arguments  = new Object[args.length];
+            Object[] arguments = new Object[args.length];
             for (int i = 0; i < args.length; i++) {
                 if (args[i] instanceof javax.servlet.ServletRequest || 
                     args[i] instanceof javax.servlet.ServletResponse || 

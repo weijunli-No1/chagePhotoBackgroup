@@ -9,6 +9,12 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @MapperScan("com.photo.bg.mapper")
 public class PhotoBgApplication {
+
+    /**
+     * 应用启动入口。
+     *
+     * @param args 启动参数
+     */
     public static void main(String[] args) {
         SpringApplication.run(PhotoBgApplication.class, args);
     }

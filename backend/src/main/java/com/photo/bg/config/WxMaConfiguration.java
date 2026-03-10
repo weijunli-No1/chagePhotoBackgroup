@@ -8,19 +8,30 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * 微信小程序配置。
+ */
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "wx.miniapp")
 public class WxMaConfiguration {
 
-    private String appid;
+    /** 微信小程序 AppId。 */
+    private String appId;
+    /** 微信小程序密钥。 */
     private String secret;
+    /** 激励视频广告位 ID。 */
     private String rewardedAdUnitId;
 
+    /**
+     * 初始化微信小程序服务实例。
+     *
+     * @return 微信小程序服务
+     */
     @Bean
     public WxMaService wxMaService() {
         WxMaDefaultConfigImpl config = new WxMaDefaultConfigImpl();
-        config.setAppid(appid);
+        config.setAppid(appId);
         config.setSecret(secret);
 
         WxMaService service = new WxMaServiceImpl();
