@@ -6,6 +6,7 @@
     "pages/profile/profile",
     "pages/document/document"
   ],
+  "subpackages": [],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "@navBgColor",

@@ -60,6 +60,7 @@
   "appid": "wx0656800976d3244f",
   "projectname": "photo-bg-miniapp",
   "condition": {},
+  "miniprogramRoot": "",
   "srcMiniprogramRoot": "",
   "editorSetting": {
     "tabIndent": "insertSpaces",
