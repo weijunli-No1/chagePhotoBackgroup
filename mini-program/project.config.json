@@ -57,7 +57,7 @@
   },
   "compileType": "miniprogram",
   "libVersion": "3.14.2",
-  "appid": "wx0656800976d3244f",
+  "appid": "your_wechat_appid",
   "projectname": "photo-bg-miniapp",
   "condition": {},
   "miniprogramRoot": "",

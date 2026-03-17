@@ -13,7 +13,7 @@ spring:
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/photo_bg?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
     username: root
-    password: QazXswEdc!123 # 根据实际情况修改
+    password: your_mysql_password # 根据实际情况修改
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       initialization-fail-timeout: -1
@@ -27,9 +27,9 @@ mybatis-plus:
 # 微信小程序配置
 wx:
   miniapp:
-    appid: wx0656800976d3244f
-    secret: 98ff6524034d5463414d3b00b374e443
-    rewarded-ad-unit-id: adunit-e1926463d0f7c2af
+    appid: your_wechat_appid
+    secret: your_wechat_secret
+    rewarded-ad-unit-id: your_ad_unit_id
 
 # Python 图像处理接口配置
 python-api:
@@ -37,10 +37,10 @@ python-api:
 
 # MinIO 配置
 minio:
-  endpoint: https://www.myhaibin.top:9000
-  access-key: minioadmin
-  secret-key: minioadmin
-  bucket-name: haibin
+  endpoint: https://your-minio-endpoint:9000
+  access-key: your_minio_access_key
+  secret-key: your_minio_secret_key
+  bucket-name: your_bucket_name
 
 
 # 自定义 NSFW 图片鉴黄校验服务

@@ -2,9 +2,8 @@ App({
   globalData: {
     userInfo: null,
     openid: '',
-    baseUrl: 'https://www.myhaibin.top/new-api',
-    //baseUrl: 'http://172.16.83.65:8080', // 后端 API 地址，可根据环境动态替换
-    defaultRewardedVideoAdUnitId: 'adunit-e1926463d0f7c2af',
+    baseUrl: 'https://your-domain.com/api', // 后端 API 地址，可根据环境动态替换
+    defaultRewardedVideoAdUnitId: 'your_ad_unit_id',
     rewardedVideoAdUnitId: ''
   },
   
