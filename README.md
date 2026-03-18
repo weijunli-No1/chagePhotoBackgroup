@@ -16,11 +16,11 @@
 
 ## 🖼️ 系统功能界面
 
-![系统功能界面](docs/assets/profile-demo.png)
+![系统功能界面](https://raw.githubusercontent.com/weijunli-No1/chagePhotoBackgroup/main/docs/assets/profile-demo.png)
 
 ## 🚀 微信小程序码
 
-![小程序码](docs/assets/miniprogram-qrcode.png)
+![小程序码](https://raw.githubusercontent.com/weijunli-No1/chagePhotoBackgroup/main/docs/assets/miniprogram-qrcode.png)
 
 ## 🏗️ 项目架构
 
