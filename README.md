@@ -14,6 +14,14 @@
 - 🔒 **内容安全**：集成微信内容安全检测 API，可选接入自定义 NSFW 鉴黄服务
 - 📱 **微信登录**：微信一键授权登录，无需注册
 
+## 🖼️ 系统功能界面
+
+<img src="docs/assets/profile-demo.png" alt="我的主页界面" width="300" />
+
+## 🚀 微信小程序码
+
+<img src="docs/assets/miniprogram-qrcode.png" alt="小程序码" width="220" />
+
 ## 🏗️ 项目架构
 
 ```
