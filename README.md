@@ -20,7 +20,7 @@
 
 ## 🚀 微信小程序码
 
-![小程序码](https://raw.githubusercontent.com/weijunli-No1/chagePhotoBackgroup/main/docs/assets/miniprogram-qrcode.png)
+<img src="https://raw.githubusercontent.com/weijunli-No1/chagePhotoBackgroup/main/docs/assets/miniprogram-qrcode.png" width="200" />
 
 ## 🏗️ 项目架构
 
