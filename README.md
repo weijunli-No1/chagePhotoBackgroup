@@ -16,11 +16,11 @@
 
 ## 🖼️ 系统功能界面
 
-<img src="docs/assets/profile-demo.png" alt="我的主页界面" width="300" />
+![系统功能界面](docs/assets/profile-demo.png)
 
 ## 🚀 微信小程序码
 
-<img src="docs/assets/miniprogram-qrcode.png" alt="小程序码" width="220" />
+![小程序码](docs/assets/miniprogram-qrcode.png)
 
 ## 🏗️ 项目架构
 
